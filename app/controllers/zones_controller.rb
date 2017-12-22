@@ -2,6 +2,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+
 class ZonesController < ApplicationController
   before_action :set_zone, only: [:show, :edit, :update, :destroy]
 
@@ -30,11 +31,11 @@ class ZonesController < ApplicationController
   # POST /zones
   # POST /zones.json
   def create
-    p "*"
-    p params
     @zone = Zone.new(zone: params["zone"])
     # p "$" * 100
-    create_nsone_zone(params["zone"])
+    test = create_nsone_zone(params["zone"])
+    test
+    p test.body
     p "%" * 100
 
     respond_to do |format|
@@ -80,17 +81,17 @@ class ZonesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def create_nsone_zone(new_zone)
-      p "$" * 100
-      uri = URI.parse("https://api.nsone.net/v1/zones/newzone.com")
+     uri = URI.parse("https://api.nsone.net/v1/zones/#{new_zone}.com")
       request = Net::HTTP::Put.new(uri)
       request["X-Nsone-Key"] = "#{ENV['API_KEY']}"
       request.body = JSON.dump({
-      "zone" => "#{new_zone}",
-      "nx_ttl" => 60
+        "zone" => "#{new_zone}.com",
+        "ttl" => 3600,
+        "nx_ttl" => 60
       })
 
       req_options = {
-      use_ssl: uri.scheme == "https",
+        use_ssl: uri.scheme == "https",
       }
 
       response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
@@ -99,6 +100,7 @@ class ZonesController < ApplicationController
     end
 
     def get_active_nsone_zones
+
       uri = URI.parse("https://api.nsone.net/v1/zones")
       request = Net::HTTP::Get.new(uri)
       request["X-Nsone-Key"] = "#{ENV['API_KEY']}"
