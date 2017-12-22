@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Zones</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Zone</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @zones.each do |zone| %>
+      <tr>
+        <td><%= zone.zone %></td>
+        <td><%= link_to 'Show', zone %></td>
+        <td><%= link_to 'Edit', edit_zone_path(zone) %></td>
+        <td><%= link_to 'Destroy', zone, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<h1>Active Zones:</h1>
+<ul>
+<% @json.each do |object| %>
+  <li><%= object['zone'] %></li>
+<% end %>
+</ul>
+
+<%= link_to 'New Zone', new_zone_path %>
