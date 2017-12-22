@@ -1,8 +1,14 @@
-<h1>Welcome To The DNS System-- THE SYSTEM SYSTEM</h1>
 
-<%= form_with model: @zone, url: zones_path do |form| %>
-  <%= form.text_field :zone %>
-  <%= form.submit %>
+
+<h2>Active Zones:</h2>
+<ul>
+<% @zones.each do |object| %>
+  <li><%= object['zone'] %></li>
 <% end %>
+</ul>
+
+
+
+
 
 

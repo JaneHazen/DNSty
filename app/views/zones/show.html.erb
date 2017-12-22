@@ -5,5 +5,12 @@
   <%= @zone.zone %>
 </p>
 
+<h2>Create A New Record For This Zone:</h2>
+<%= form_with model: @record, url: zone_records_path do |form| %>
+  <%= form.hidden_field :zone_id, value: @zone.id
+  <%= form.text_field :record %>
+  <%= form.submit %>
+<% end %>
+
 <%= link_to 'Edit', edit_zone_path(@zone) %> |
 <%= link_to 'Back', zones_path %>
