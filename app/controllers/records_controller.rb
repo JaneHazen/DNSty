@@ -1,3 +1,7 @@
+require 'net/http'
+require 'uri'
+require 'json'
+
 class RecordsController < ApplicationController
   before_action :set_record, only: [:show, :edit, :update, :destroy]
 
@@ -24,14 +28,24 @@ class RecordsController < ApplicationController
   # POST /records
   # POST /records.json
   def create
-    @record = Record.new(record_params)
+    p "$"* 100
+    p params
+    @thiszone = Zone.find(params["zone_id"])
+    @record = Record.new(zone_id: params["zone_id"], id: params["id"], name: params["record"]["name"])
+
+    test = create_nsone_record(zone: @thiszone.zone, record: @record.name)
+    test
+    p test.body
+    p "YES" * 100
+
 
     respond_to do |format|
       if @record.save
-        format.html { redirect_to @record, notice: 'Record was successfully created.' }
-        format.json { render :show, status: :created, location: @record }
+        format.html { render :show, notice: 'Record was successfully created.' }
+        format.json { render :show, status: :created, location: @zone }
       else
-        format.html { render :new }
+        p @record.errors.full_messages
+        format.html { redirect_to zone_path(@thiszone.id) }
         format.json { render json: @record.errors, status: :unprocessable_entity }
       end
     end
@@ -68,7 +82,27 @@ class RecordsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def record_params
-      params.require(:record).permit(:name)
+    def create_nsone_record(params)
+      uri = URI.parse("https://api.nsone.net/v1/zones/#{params[:zone]}.com/#{params[:record]}.#{params[:zone]}.com/A")
+      request = Net::HTTP::Put.new(uri)
+      request["X-Nsone-Key"] = "#{ENV['API_KEY']}"
+      request.body = JSON.dump({
+        "zone" => "#{params[:zone]}.com",
+        "domain" => "#{params[:record]}.#{params[:zone]}.com",
+        "type" => "A",
+        "answers" => [
+          {
+            "answer" => ["1.2.3.4"]
+          }
+        ]
+      })
+
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
+
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+        http.request(request)
+      end
     end
 end

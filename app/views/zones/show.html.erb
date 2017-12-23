@@ -6,9 +6,9 @@
 </p>
 
 <h2>Create A New Record For This Zone:</h2>
-<%= form_with model: @record, url: zone_records_path do |form| %>
-  <%= form.hidden_field :zone_id, value: @zone.id
-  <%= form.text_field :record %>
+<%= form_with model: @zone.records.new, url: zone_records_path(@zone), local: true do |form| %>
+
+  <%= form.text_field :name %>
   <%= form.submit %>
 <% end %>
 

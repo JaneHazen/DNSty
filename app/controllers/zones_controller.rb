@@ -17,6 +17,7 @@ class ZonesController < ApplicationController
   # GET /zones/1
   # GET /zones/1.json
   def show
+    @zone = Zone.find(params[:id])
   end
 
   # GET /zones/new
@@ -32,7 +33,6 @@ class ZonesController < ApplicationController
   # POST /zones.json
   def create
     @zone = Zone.new(zone: params["zone"])
-    # p "$" * 100
     test = create_nsone_zone(params["zone"])
     test
     p test.body
