@@ -1,38 +1,32 @@
 <p id="notice"><%= notice %></p>
-<h1>Welcome To The DNS System-- THE SYSTEM SYSTEM</h1>
 
-<h2>Create a New Zone:</h2>
+<h2 class="NewForm">Create a New Zone:</h2>
 <%= form_with model: @zone, url: zones_path do |form| %>
   <%= form.text_field :zone %>
   <%= form.submit %>
 <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Zones Created On The System System:</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
+<div>
+  <h2>Zones Created On The System System:</h2>
     <% @zones.each do |zone| %>
-      <tr>
-        <td><%= link_to zone.zone, zone %></td>
-      </tr>
+      <ul>
+        <li><%= link_to zone.zone, zone %></li>
+          <ol>
+          <% zone.records.each do |record| %>
+            <li><%= record.name %></li>
+          <%end %>
+          </ol>
+      </ul>
     <% end %>
-  </tbody>
-</table>
+</div>
 
-<br>
-
-<h1>Complete List of Active Zones:</h1>
-<ul>
-<% @json.each do |object| %>
-  <li><%= object["zone"] %></li>
-<% end %>
-</ul>
+<div>
+  <h1>Complete List of Active Zones:</h1>
+    <ul> <% @json.each do |object| %>
+      <li><%= object["zone"] %></li>
+      <% end %>
+    </ul>
+</div>
 
 
 
-<%= link_to 'New Zone', new_zone_path %>

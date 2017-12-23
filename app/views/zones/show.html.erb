@@ -5,6 +5,10 @@
   <%= @zone.zone %>
 </p>
 
+<p>
+  Your Zone has already been saved in NS1. To configure it, you must add your slave IP addresses to your zone in the Zone Transfers view on the NS1 console.Once you have allowed zone transfers from NS1, configure your slave servers to be able to do zone transfers with xfr01.nsone.net(192.135.223.10). Confirm this is working with dig.
+</p>
+
 <h2>Create A New Record For This Zone:</h2>
 <%= form_with model: @zone.records.new, url: zone_records_path(@zone), local: true do |form| %>
 
@@ -12,5 +16,5 @@
   <%= form.submit %>
 <% end %>
 
-<%= link_to 'Edit', edit_zone_path(@zone) %> |
-<%= link_to 'Back', zones_path %>
+
+<%= link_to 'Back to Home', zones_path %>
